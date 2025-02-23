@@ -1,4 +1,5 @@
 package com.veena.weatherapp.service;
+import com.veena.weatherapp.dto.CityWeatherRequestDto;
 import com.veena.weatherapp.dto.CityWeatherResponseDto;
 import com.veena.weatherapp.exception.WeatherException;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -21,8 +22,14 @@ public class WeatherService {
         this.webClient = webClientBuilder.baseUrl("https://api.openweathermap.org/data/2.5").build();
     }
 
-    public Mono<CityWeatherResponseDto> getCityWeather(String city, String unit, String lang) {
-        String url = "/weather?q=" + city + "&appid=" + apiKey + "&units=" + unit + "&lang=" + lang;
+    public Mono<CityWeatherResponseDto> getCityWeather(CityWeatherRequestDto requestDto) {
+        String url = "/weather?q=" + requestDto.getCityName()
+                + "&units=" + requestDto.getUnit()
+                + "&lang=" + requestDto.getLanguage()
+                + "&lat=" + requestDto.getLatitude()
+                + "&lon=" + requestDto.getLongitude()
+                + "&dt=" + requestDto.getTimeDifference()
+                + "&appid=" + apiKey;
 
         return webClient.get()
                 .uri(url)
@@ -33,6 +40,10 @@ public class WeatherService {
 
     private CityWeatherResponseDto mapToCityWeatherResponseDto(Map<String, Object> response) {
         String cityName = (String) response.get("name");
+
+        Map<String, Object> coords = (Map<String, Object>) response.get("coord");
+        Double latitude = coords != null ? ((Number) coords.get("lat")).doubleValue() : null;
+        Double longitude = coords != null ? ((Number) coords.get("lon")).doubleValue() : null;
 
         Map<String, Object> main = (Map<String, Object>) response.get("main");
         Double temperature = main != null ? ((Number) main.get("temp")).doubleValue() : null;
@@ -53,6 +64,8 @@ public class WeatherService {
         weatherResponse.setPressure(pressure);
         weatherResponse.setTemperature(temperature);
         weatherResponse.setWindSpeed(windSpeed);
+        weatherResponse.setLatitude(latitude);
+        weatherResponse.setLongitude(longitude);
         return weatherResponse;
     }
 

@@ -10,4 +10,6 @@ public class CityWeatherResponseDto {
     private Double pressure;
     private Double windSpeed;
     private String description;
+    private Double longitude;
+    private Double latitude;
 }

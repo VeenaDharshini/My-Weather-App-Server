@@ -1,5 +1,6 @@
 package com.veena.weatherapp.controller;
 
+import com.veena.weatherapp.dto.CityWeatherRequestDto;
 import com.veena.weatherapp.dto.CityWeatherResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -17,9 +18,19 @@ public class WeatherController {
     public Mono<CityWeatherResponseDto> getCityWeather(
             @RequestParam String city,
             @RequestParam(defaultValue = "metric") String unit,
-            @RequestParam(defaultValue = "en") String lang) {
-        System.out.println("HERE INPUT" + city +" "+unit+" "+lang);
-        return weatherService.getCityWeather(city, unit, lang);
+            @RequestParam(defaultValue = "en") String lang,
+            @RequestParam Double lon,
+            @RequestParam Double lat,
+            @RequestParam Long dt
+    ) {
+        CityWeatherRequestDto requestDto = new CityWeatherRequestDto();
+        requestDto.setCityName(city);
+        requestDto.setUnit(unit);
+        requestDto.setLanguage(lang);
+        requestDto.setLatitude(lat);
+        requestDto.setLongitude(lon);
+        requestDto.setTimeDifference(dt);
+        return weatherService.getCityWeather(requestDto);
     }
 
     @GetMapping("/forecast")
