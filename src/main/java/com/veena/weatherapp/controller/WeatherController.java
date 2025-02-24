@@ -6,34 +6,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.veena.weatherapp.service.WeatherService;
 import reactor.core.publisher.Mono;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 @RestController
-@RequestMapping("/api/weather")
+@RequestMapping("api")
 public class WeatherController {
+    private static final Logger logger = LoggerFactory.getLogger(WeatherController.class);
 
     @Autowired
     private WeatherService weatherService;
 
-    @GetMapping
+    @PostMapping("weather")
     public Mono<CityWeatherResponseDto> getCityWeather(
-            @RequestParam String city,
-            @RequestParam(defaultValue = "metric") String unit,
-            @RequestParam(defaultValue = "en") String lang,
-            @RequestParam Double lon,
-            @RequestParam Double lat,
-            @RequestParam Long dt
+            @RequestBody CityWeatherRequestDto cityWeatherRequestDto
     ) {
-        CityWeatherRequestDto requestDto = new CityWeatherRequestDto();
-        requestDto.setCityName(city);
-        requestDto.setUnit(unit);
-        requestDto.setLanguage(lang);
-        requestDto.setLatitude(lat);
-        requestDto.setLongitude(lon);
-        requestDto.setTimeDifference(dt);
-        return weatherService.getCityWeather(requestDto);
+        logger.info("Received weather request: {}", cityWeatherRequestDto);
+        return weatherService.getCityWeather(cityWeatherRequestDto);
     }
 
-    @GetMapping("/forecast")
+    @GetMapping("forecast")
     public Mono<String> getForecast(
             @RequestParam String city,
             @RequestParam(defaultValue = "metric") String unit,

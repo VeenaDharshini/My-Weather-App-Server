@@ -26,9 +26,6 @@ public class WeatherService {
         String url = "/weather?q=" + requestDto.getCityName()
                 + "&units=" + requestDto.getUnit()
                 + "&lang=" + requestDto.getLanguage()
-                + "&lat=" + requestDto.getLatitude()
-                + "&lon=" + requestDto.getLongitude()
-                + "&dt=" + requestDto.getTimeDifference()
                 + "&appid=" + apiKey;
 
         return webClient.get()
