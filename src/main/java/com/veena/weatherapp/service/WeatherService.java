@@ -18,8 +18,11 @@ public class WeatherService {
     @Value("${openweather.api.key}")
     private String apiKey;
 
+    @Value("$openweather.api")
+    private String apiUrl;
+
     public WeatherService(WebClient.Builder webClientBuilder) {
-        this.webClient = webClientBuilder.baseUrl("https://api.openweathermap.org/data/2.5").build();
+        this.webClient = webClientBuilder.baseUrl(apiUrl).build();
     }
 
     public Mono<CityWeatherResponseDto> getCityWeather(CityWeatherRequestDto requestDto) {
