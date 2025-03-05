@@ -6,6 +6,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
+import org.springframework.beans.factory.annotation.Value;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -15,10 +16,10 @@ import java.util.Map;
 public class WeatherService {
     private final WebClient webClient;
 
-    @Value("${openweather.api.key}")
+    @Value("${OPEN_WEATHER_API_KEY:NOT_SET}")
     private String apiKey;
 
-    @Value("$openweather.api")
+    @Value("${OPEN_WEATHER_API:NOT_SET}")
     private String apiUrl;
 
     public WeatherService(WebClient.Builder webClientBuilder) {
