@@ -25,12 +25,4 @@ public class WeatherController {
         logger.info("Received weather request: {}", cityWeatherRequestDto);
         return weatherService.getCityWeather(cityWeatherRequestDto);
     }
-
-    @GetMapping("forecast")
-    public Mono<String> getForecast(
-            @RequestParam String city,
-            @RequestParam(defaultValue = "metric") String unit,
-            @RequestParam(defaultValue = "en") String lang) {
-        return weatherService.getForecast(city, unit, lang);
-    }
 }

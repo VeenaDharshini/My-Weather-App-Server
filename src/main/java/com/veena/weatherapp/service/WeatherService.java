@@ -1,13 +1,11 @@
 package com.veena.weatherapp.service;
 import com.veena.weatherapp.dto.CityWeatherRequestDto;
 import com.veena.weatherapp.dto.CityWeatherResponseDto;
-import com.veena.weatherapp.exception.WeatherException;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.reactive.function.client.WebClientResponseException;
-import org.springframework.beans.factory.annotation.Value;
 import reactor.core.publisher.Mono;
+import io.github.cdimascio.dotenv.Dotenv;
 
 import java.util.List;
 import java.util.Map;
@@ -16,13 +14,13 @@ import java.util.Map;
 public class WeatherService {
     private final WebClient webClient;
 
-    @Value("${OPEN_WEATHER_API_KEY:NOT_SET}")
-    private String apiKey;
-
-    @Value("${OPEN_WEATHER_API:NOT_SET}")
-    private String apiUrl;
+    private final String apiKey;
+    private final String apiUrl;
 
     public WeatherService(WebClient.Builder webClientBuilder) {
+        Dotenv dotenv = Dotenv.load();
+        this.apiKey = dotenv.get("OPEN_WEATHER_API_KEY");
+        this.apiUrl = dotenv.get("OPEN_WEATHER_API");
         this.webClient = webClientBuilder.baseUrl(apiUrl).build();
     }
 
@@ -68,11 +66,6 @@ public class WeatherService {
         weatherResponse.setLatitude(latitude);
         weatherResponse.setLongitude(longitude);
         return weatherResponse;
-    }
-
-    public Mono<String> getForecast(String city, String unit, String lang) {
-        String url = "/forecast?q=" + city + "&appid=" + apiKey + "&units=" + unit + "&lang=" + lang;
-        return webClient.get().uri(url).retrieve().bodyToMono(String.class);
     }
 
 }
