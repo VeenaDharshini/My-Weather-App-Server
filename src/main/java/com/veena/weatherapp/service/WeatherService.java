@@ -21,14 +21,14 @@ public class WeatherService {
         Dotenv dotenv = Dotenv.load();
         this.apiKey = dotenv.get("OPEN_WEATHER_API_KEY");
         this.apiUrl = dotenv.get("OPEN_WEATHER_API");
-        this.webClient = webClientBuilder.baseUrl(apiUrl).build();
+        this.webClient = webClientBuilder.baseUrl("https://api.openweathermap.org/data/2.5").build();
     }
 
     public Mono<CityWeatherResponseDto> getCityWeather(CityWeatherRequestDto requestDto) {
         String url = "/weather?q=" + requestDto.getCityName()
                 + "&units=" + requestDto.getUnit()
                 + "&lang=" + requestDto.getLanguage()
-                + "&appid=" + apiKey;
+                + "&appid=" + "dd0eb40220a5a30e10fd7323dc14ce3b";
 
         return webClient.get()
                 .uri(url)
