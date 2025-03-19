@@ -1,6 +1,7 @@
 package com.veena.weatherapp.service;
 import com.veena.weatherapp.dto.CityWeatherRequestDto;
 import com.veena.weatherapp.dto.CityWeatherResponseDto;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
